@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; // Includi l'autoload di Composer
+require '../vendor/autoload.php'; // Includi l'autoload di Composer
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
