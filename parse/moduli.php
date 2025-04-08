@@ -18,22 +18,20 @@ function parseModules($csvFile) {
             
             // Se la descrizione non è vuota, aggiungere l'elemento all'array
             if (!empty($descrizione)) {
-                // Aggiungi un array per ogni modulo con informazioni su Linea, Modulo e Descrizione
-                $modules[] = [
-                    'ID' => "L" . $linea . "M" . str_pad($modulo, 2, "0", STR_PAD_LEFT),
-                    'Linea' => $linea,
-                    'Modulo' => $modulo,
-                    'Descrizione' => $descrizione
-                ];
+                // Generazione dell'identificativo senza spazi tra "L" e il resto
+                $moduleID = "L" . $linea . "M" . str_pad($modulo, 2, "0", STR_PAD_LEFT);
+                
+                // Aggiungere al risultato
+                $modules[$moduleID] = $descrizione;
             }
         }
         
         fclose($handle);
     }
-    
 
+    // Ordinare i moduli prima per linea, poi per modulo
+    ksort($modules);
+    
     return $modules;
 }
-
-
 ?>
