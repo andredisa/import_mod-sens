@@ -77,7 +77,8 @@ if (
     ];
 
     // Funzione per stampare i dati con bordi
-    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle) {
+    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle)
+    {
         $rowIndex = $startRow;
         $righePerBlocco = 51;  // Righe per blocco (56 totali - 1 riga per firma)
         $total = count($data);
@@ -94,7 +95,7 @@ if (
             ->setCellValue('G' . $rowIndex, 'Data Visita 2')
             ->setCellValue('H' . $rowIndex, 'Esito')
             ->setCellValue('I' . $rowIndex, 'Tecnico');
-        
+
         // Applica bordi spessi all'intestazione
         $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
 
@@ -135,7 +136,7 @@ if (
                 $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
                 $sheet->setCellValue("D$rowIndex", 'Visita 1');
                 $sheet->setCellValue("G$rowIndex", 'Visita 2');
-                
+
                 // Applica i bordi spessi alla riga della firma
                 $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
                 $rowIndex++;
@@ -154,7 +155,7 @@ if (
                     ->setCellValue('G' . $rowIndex, 'Data Visita 2')
                     ->setCellValue('H' . $rowIndex, 'Esito')
                     ->setCellValue('I' . $rowIndex, 'Tecnico');
-                
+
                 // Applica i bordi spessi all'intestazione dopo la firma
                 $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
                 $rowIndex++;  // Vai alla riga successiva dopo l'intestazione
@@ -170,7 +171,7 @@ if (
             $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
             $sheet->setCellValue("D$rowIndex", 'Visita 1');
             $sheet->setCellValue("G$rowIndex", 'Visita 2');
-            
+
             // Applica i bordi spessi alla riga della firma
             $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
             $rowIndex++;
@@ -187,10 +188,40 @@ if (
     $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
     $writer->save($outputFileName);
 
-    echo "File caricato e modificato con successo! <br>";
-    echo "Puoi <a href='$outputFileName' download>scaricare il file modificato</a>";
+    // Successo
+    echo "
+    <!DOCTYPE html>
+    <html lang='it'>
+    <head>
+        <meta charset='UTF-8'>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <title>File Caricato e Modificato</title>
+        <!-- Bootstrap CSS -->
+        <link href='../frontEnd/modifica_excel_style.css' rel='stylesheet'>
+        <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
+        <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
+    </head>
+    <body>
+            <div class='container'>
+                <h1>Operazione Completata</h1>
+                <div class='alert alert-success alert-dismissible fade show' role='alert'>
+                    <strong>Successo!</strong> Il file è stato caricato e modificato correttamente.
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                </div>
+                <div class='text-center'>
+                    <a href='$outputFileName' download class='btn btn-download'>
+                        <i class='bi bi-download'></i> Scaricare il file modificato
+                    </a></p>
+                </div>
+            </div>
 
+            <!-- Bootstrap JS and Popper.js -->
+            <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
+            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
+        </body>
+        </html>
+    ";
 } else {
-    echo "Errore nel caricamento dei file!";
+    echo "<p class='alert alert-danger'>Errore nel caricamento dei file!</p>";
 }
 ?>
