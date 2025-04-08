@@ -29,8 +29,9 @@ function parseSensors($csvFile) {
         fclose($handle);
     }
 
+    // Ordinare i sensori prima per linea, poi per sensore
+    ksort($sensors);
+    
     return $sensors;
 }
-
-
-
+?>
