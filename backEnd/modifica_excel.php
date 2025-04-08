@@ -1,77 +1,192 @@
 <?php
-
-require '../vendor/autoload.php'; // Includi l'autoload di Composer
+require '../vendor/autoload.php';
 require_once '../parse/sensori.php';
 require_once '../parse/moduli.php';
 
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Font;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
-// Verifica se i file sono stati caricati correttamente
 if (
     isset($_FILES['sensoriFile']) && $_FILES['sensoriFile']['error'] == 0 &&
     isset($_FILES['moduliFile']) && $_FILES['moduliFile']['error'] == 0 &&
     isset($_FILES['fileExcel']) && $_FILES['fileExcel']['error'] == 0
 ) {
 
-    // Ottieni i file CSV caricati
     $sensoriFile = $_FILES['sensoriFile']['tmp_name'];
     $moduliFile = $_FILES['moduliFile']['tmp_name'];
     $excelFile = $_FILES['fileExcel']['tmp_name'];
 
-    // Carica i dati dai file CSV in array
     $sensori = parseSensors($sensoriFile);
     $moduli = parseModules($moduliFile);
 
-    // Carica il file Excel da modificare
-    $spreadsheet = IOFactory::load($excelFile); // Carica il file Excel caricato
+    $spreadsheet = IOFactory::load($excelFile);
 
-    // Seleziona il foglio "ALL-6"
     $sheet = $spreadsheet->getSheetByName('ALL-6');
     if ($sheet === null) {
         echo "Il foglio 'ALL-6' non esiste!";
         exit;
     }
 
-    // Pulizia delle righe dalla 4 in poi
-    $highestRow = $sheet->getHighestRow();
-    for ($row = 4; $row <= $highestRow; $row++) {
-        $sheet->removeRow($row);
-    }
+    // Sciogli tutte le celle unite dalla riga 4 in giù
+    $mergedCells = $sheet->getMergeCells();
+    foreach ($mergedCells as $range) {
+        preg_match('/[A-Z]+(\d+):[A-Z]+(\d+)/', $range, $matches);
+        $startRow = (int) $matches[1];
 
-    // Aggiungi l'intestazione alla riga 4
-    $sheet->setCellValue('A4', 'Id')
-        ->setCellValue('B4', 'Tipo');
-
-    // Funzione per stampare i sensori e moduli
-    function printData($sheet, $data, $startRow) {
-        $rowIndex = $startRow;
-        
-        foreach ($data as $sensorID => $descrizione) {
-            // Se $descrizione è un array, convertilo in una stringa
-            if (is_array($descrizione)) {
-                $descrizione = implode(', ', $descrizione);  // Unisci gli elementi dell'array in una stringa
-            }
-            
-            // Stampa i dati nella riga corrente
-            $sheet->setCellValue('A' . $rowIndex, $sensorID)  // Usa direttamente l'ID del sensore
-                  ->setCellValue('B' . $rowIndex, $descrizione);  // Usa direttamente la descrizione (che è ora una stringa)
-            $rowIndex++; // Passa alla riga successiva
+        if ($startRow >= 4) {
+            $sheet->unmergeCells($range);
         }
     }
 
-    // Stampa i sensori nell'Excel
-    printData($sheet, $sensori, 5);  // Sensori
+    // Pulisce tutte le righe da 4 in poi in un colpo solo
+    $highestRow = $sheet->getHighestRow();
+    if ($highestRow >= 4) {
+        $sheet->removeRow(4, $highestRow - 3);
+    }
 
-    // Stampa i moduli nell'Excel
-    printData($sheet, $moduli, $sheet->getHighestRow() + 1);  // Moduli
+    // Unisci i sensori e i moduli in un unico array
+    $data = array_merge($sensori, $moduli);
 
-    // Salva il file Excel modificato
+    // Stili per i bordi
+    $borderThin = [
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_THIN,  // Tipo di bordo (linea sottile)
+                'color' => ['argb' => '000000'],  // Colore del bordo (nero)
+            ],
+        ],
+    ];
+
+    $borderThick = [
+        'borders' => [
+            'allBorders' => [
+                'borderStyle' => Border::BORDER_MEDIUM,  // Tipo di bordo (bordo medio)
+                'color' => ['argb' => '000000'],  // Colore del bordo (nero)
+            ],
+        ],
+    ];
+
+    // Stile del font per Data Visita 1 e Data Visita 2 (testo più piccolo)
+    $smallFontStyle = [
+        'font' => [
+            'size' => 8,  // Imposta la dimensione del font più piccola
+        ]
+    ];
+
+    // Funzione per stampare i dati con bordi
+    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle) {
+        $rowIndex = $startRow;
+        $righePerBlocco = 51;  // Righe per blocco (56 totali - 1 riga per firma)
+        $total = count($data);
+        $i = 0;
+        $signaturePrinted = false;  // Flag per gestire la stampa della firma una sola volta
+
+        // Stampa l'intestazione iniziale alla riga 4 (con bordi spessi)
+        $sheet->setCellValue('A' . $rowIndex, 'Id')
+            ->setCellValue('B' . $rowIndex, 'Tipo')
+            ->setCellValue('C' . $rowIndex, 'Anzianità')
+            ->setCellValue('D' . $rowIndex, 'Data Visita 1')
+            ->setCellValue('E' . $rowIndex, 'Esito')
+            ->setCellValue('F' . $rowIndex, 'Tecnico')
+            ->setCellValue('G' . $rowIndex, 'Data Visita 2')
+            ->setCellValue('H' . $rowIndex, 'Esito')
+            ->setCellValue('I' . $rowIndex, 'Tecnico');
+        
+        // Applica bordi spessi all'intestazione
+        $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
+
+        // Riduci la dimensione del font per 'Data Visita 1' e 'Data Visita 2'
+        $sheet->getStyle('D' . $rowIndex)->applyFromArray($smallFontStyle);
+        $sheet->getStyle('G' . $rowIndex)->applyFromArray($smallFontStyle);
+
+        $rowIndex++;  // Vai alla riga successiva dopo l'intestazione
+
+        // Stampa i dati
+        while ($i < $total) {
+            // Stampa fino a 51 righe di dati
+            $righeStampate = 0;
+            while ($i < $total && $righeStampate < $righePerBlocco) {
+                $id = key($data);  // Ottieni la chiave (id) dell'array
+                $descrizione = current($data);  // Ottieni il valore della descrizione
+
+                // Stampa i dati nelle celle
+                $sheet->setCellValue('A' . $rowIndex, $id);
+                $sheet->setCellValue('B' . $rowIndex, $descrizione);
+
+                // Applica i bordi sottili a tutta la riga da A a I
+                $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThin);
+                $rowIndex++;
+
+                // Avanza al prossimo elemento nell'array
+                next($data);
+                $i++;
+                $righeStampate++;
+            }
+
+            // Riga per la firma dopo ogni 51 righe stampate (bordo spesso)
+            if ($righeStampate == $righePerBlocco) {
+                $sheet->mergeCells("A$rowIndex:C$rowIndex");
+                $sheet->mergeCells("D$rowIndex:F$rowIndex");
+                $sheet->mergeCells("G$rowIndex:I$rowIndex");
+
+                $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
+                $sheet->setCellValue("D$rowIndex", 'Visita 1');
+                $sheet->setCellValue("G$rowIndex", 'Visita 2');
+                
+                // Applica i bordi spessi alla riga della firma
+                $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
+                $rowIndex++;
+
+                $signaturePrinted = true;  // La firma è stata stampata
+            }
+
+            // Ristampa l'intestazione dopo ogni firma (bordo spesso)
+            if ($i < $total) {
+                $sheet->setCellValue('A' . $rowIndex, 'Id')
+                    ->setCellValue('B' . $rowIndex, 'Tipo')
+                    ->setCellValue('C' . $rowIndex, 'Anzianità')
+                    ->setCellValue('D' . $rowIndex, 'Data Visita 1')
+                    ->setCellValue('E' . $rowIndex, 'Esito')
+                    ->setCellValue('F' . $rowIndex, 'Tecnico')
+                    ->setCellValue('G' . $rowIndex, 'Data Visita 2')
+                    ->setCellValue('H' . $rowIndex, 'Esito')
+                    ->setCellValue('I' . $rowIndex, 'Tecnico');
+                
+                // Applica i bordi spessi all'intestazione dopo la firma
+                $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
+                $rowIndex++;  // Vai alla riga successiva dopo l'intestazione
+            }
+        }
+
+        // Se siamo alla fine dei dati e la firma non è stata ancora stampata, aggiungila (bordo spesso)
+        if ($i >= $total && !$signaturePrinted) {
+            $sheet->mergeCells("A$rowIndex:C$rowIndex");
+            $sheet->mergeCells("D$rowIndex:F$rowIndex");
+            $sheet->mergeCells("G$rowIndex:I$rowIndex");
+
+            $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
+            $sheet->setCellValue("D$rowIndex", 'Visita 1');
+            $sheet->setCellValue("G$rowIndex", 'Visita 2');
+            
+            // Applica i bordi spessi alla riga della firma
+            $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
+            $rowIndex++;
+        }
+
+        return $rowIndex;
+    }
+
+    // Chiama la funzione passando i dati uniti
+    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick, $smallFontStyle);  // 4 è la riga iniziale (intestazione)
+
+    // Salvataggio del file modificato
     $outputFileName = 'file_modificato_' . time() . '.xlsx';
     $writer = IOFactory::createWriter($spreadsheet, 'Xlsx');
     $writer->save($outputFileName);
 
-    // Fornisci il file modificato per il download
     echo "File caricato e modificato con successo! <br>";
     echo "Puoi <a href='$outputFileName' download>scaricare il file modificato</a>";
 
