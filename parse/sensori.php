@@ -3,7 +3,6 @@ require_once '../gestione/funzioni.php';
 
 function parseSensors($csvFile) {
     $sensors = [];
-    
     // Leggere il file CSV
     if (($handle = fopen($csvFile, "r")) !== FALSE) {
         // Saltare la prima riga (intestazione)
@@ -25,13 +24,10 @@ function parseSensors($csvFile) {
                 $sensors[$sensorID] = $descrizione;
             }
         }
-        
         fclose($handle);
     }
-
     // Ordinare i sensori prima per linea, poi per sensore
     ksort($sensors);
-    
     return $sensors;
 }
 ?>
