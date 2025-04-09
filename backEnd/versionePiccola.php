@@ -187,7 +187,6 @@ if (
 
     echo "File caricato e modificato con successo! <br>";
     echo "Puoi <a href='$outputFileName' download>scaricare il file modificato</a>";
-
 } else {
     echo "Errore nel caricamento dei file!";
 }
