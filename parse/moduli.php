@@ -3,12 +3,10 @@ require_once '../gestione/funzioni.php';
 
 function parseModules($csvFile) {
     $modules = [];
-    
     // Leggere il file CSV
     if (($handle = fopen($csvFile, "r")) !== FALSE) {
         // Saltare la prima riga (intestazione)
         fgetcsv($handle);
-        
         // Leggere ogni riga
         while (($data = fgetcsv($handle)) !== FALSE) {
             // Creazione dell'identificatore del modulo
@@ -25,13 +23,10 @@ function parseModules($csvFile) {
                 $modules[$moduleID] = $descrizione;
             }
         }
-        
         fclose($handle);
     }
-
     // Ordinare i moduli prima per linea, poi per modulo
     ksort($modules);
-    
     return $modules;
 }
 ?>
