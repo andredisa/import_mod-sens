@@ -6,6 +6,7 @@ require_once '../parse/moduli.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Style\Border;
+use PhpOffice\PhpSpreadsheet\Style\Font;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 if (
@@ -68,11 +69,18 @@ if (
         ],
     ];
 
+    // Stile del font per Data Visita 1 e Data Visita 2 (testo più piccolo)
+    $smallFontStyle = [
+        'font' => [
+            'size' => 8,  // Imposta la dimensione del font più piccola
+        ]
+    ];
+
     // Funzione per stampare i dati con bordi
-    function printData($sheet, $data, $startRow, $borderThin, $borderThick)
+    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle)
     {
         $rowIndex = $startRow;
-        $righePerBlocco = 65;  // Righe per blocco (56 totali - 1 riga per firma)
+        $righePerBlocco = 53;  // Righe per blocco (56 totali - 1 riga per firma)
         $total = count($data);
         $i = 0;
         $signaturePrinted = false;  // Flag per gestire la stampa della firma una sola volta
@@ -87,19 +95,14 @@ if (
             ->setCellValue('G' . $rowIndex, 'Data Visita 2')
             ->setCellValue('H' . $rowIndex, 'Esito')
             ->setCellValue('I' . $rowIndex, 'Tecnico');
-        // Adattare la larghezza delle colonne automaticamente
-        $sheet->getColumnDimension('A')->setAutoSize(true);
-        $sheet->getColumnDimension('B')->setAutoSize(true);
-        $sheet->getColumnDimension('C')->setAutoSize(true);
-        $sheet->getColumnDimension('D')->setAutoSize(true);
-        $sheet->getColumnDimension('E')->setAutoSize(true);
-        $sheet->getColumnDimension('F')->setAutoSize(true);
-        $sheet->getColumnDimension('G')->setAutoSize(true);
-        $sheet->getColumnDimension('H')->setAutoSize(true);
-        $sheet->getColumnDimension('I')->setAutoSize(true);
 
         // Applica bordi spessi all'intestazione
         $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
+
+        // Riduci la dimensione del font per 'Data Visita 1' e 'Data Visita 2'
+        $sheet->getStyle('D' . $rowIndex)->applyFromArray($smallFontStyle);
+        $sheet->getStyle('G' . $rowIndex)->applyFromArray($smallFontStyle);
+
         $rowIndex++;  // Vai alla riga successiva dopo l'intestazione
 
         // Stampa i dati
@@ -152,15 +155,9 @@ if (
                     ->setCellValue('G' . $rowIndex, 'Data Visita 2')
                     ->setCellValue('H' . $rowIndex, 'Esito')
                     ->setCellValue('I' . $rowIndex, 'Tecnico');
-                $sheet->getColumnDimension('A')->setAutoSize(true);
-                $sheet->getColumnDimension('B')->setAutoSize(true);
-                $sheet->getColumnDimension('C')->setAutoSize(true);
-                $sheet->getColumnDimension('D')->setAutoSize(true);
-                $sheet->getColumnDimension('E')->setAutoSize(true);
-                $sheet->getColumnDimension('F')->setAutoSize(true);
-                $sheet->getColumnDimension('G')->setAutoSize(true);
-                $sheet->getColumnDimension('H')->setAutoSize(true);
-                $sheet->getColumnDimension('I')->setAutoSize(true);
+                    
+                    $sheet->getStyle('D' . $rowIndex)->applyFromArray($smallFontStyle);
+                    $sheet->getStyle('G' . $rowIndex)->applyFromArray($smallFontStyle);
 
                 // Applica i bordi spessi all'intestazione dopo la firma
                 $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
@@ -187,7 +184,7 @@ if (
     }
 
     // Chiama la funzione passando i dati uniti
-    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick);  // 4 è la riga iniziale (intestazione)
+    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick, $smallFontStyle);  // 4 è la riga iniziale (intestazione)
 
     // Salvataggio del file modificato
     $outputFileName = 'file_modificato_' . time() . '.xlsx';
@@ -229,3 +226,4 @@ if (
 } else {
     echo "<p class='alert alert-danger'>Errore nel caricamento dei file!</p>";
 }
+?>
