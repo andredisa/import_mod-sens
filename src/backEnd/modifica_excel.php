@@ -98,7 +98,6 @@ if (
 
         // Applica bordi spessi all'intestazione
         $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
-
         // Riduci la dimensione del font per 'Data Visita 1' e 'Data Visita 2'
         $sheet->getStyle('D' . $rowIndex)->applyFromArray($smallFontStyle);
         $sheet->getStyle('G' . $rowIndex)->applyFromArray($smallFontStyle);
@@ -132,15 +131,12 @@ if (
                 $sheet->mergeCells("A$rowIndex:C$rowIndex");
                 $sheet->mergeCells("D$rowIndex:F$rowIndex");
                 $sheet->mergeCells("G$rowIndex:I$rowIndex");
-
                 $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
                 $sheet->setCellValue("D$rowIndex", 'Visita 1');
                 $sheet->setCellValue("G$rowIndex", 'Visita 2');
-
                 // Applica i bordi spessi alla riga della firma
                 $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
                 $rowIndex++;
-
                 $signaturePrinted = true;  // La firma è stata stampata
             }
 
@@ -170,16 +166,13 @@ if (
             $sheet->mergeCells("A$rowIndex:C$rowIndex");
             $sheet->mergeCells("D$rowIndex:F$rowIndex");
             $sheet->mergeCells("G$rowIndex:I$rowIndex");
-
             $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
             $sheet->setCellValue("D$rowIndex", 'Visita 1');
             $sheet->setCellValue("G$rowIndex", 'Visita 2');
-
             // Applica i bordi spessi alla riga della firma
             $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
             $rowIndex++;
         }
-
         return $rowIndex;
     }
 
@@ -195,15 +188,18 @@ if (
     echo "
     <!DOCTYPE html>
     <html lang='it'>
+
     <head>
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>File Caricato e Modificato</title>
+
         <!-- Bootstrap CSS -->
         <link href='../frontEnd/modifica_excel_style.css' rel='stylesheet'>
         <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
         <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
     </head>
+
     <body>
             <div class='container'>
                 <h1>Operazione Completata</h1>
@@ -211,16 +207,19 @@ if (
                     <strong>Successo!</strong> Il file è stato caricato e modificato correttamente.
                     <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                 </div>
+
                 <div class='text-center'>
                     <a href='$outputFileName' download class='btn btn-download'>
                         <i class='bi bi-download'></i> Scaricare il file modificato
                     </a></p>
                 </div>
+                
             </div>
             <!-- Bootstrap JS and Popper.js -->
             <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
             <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
         </body>
+
         </html>
     ";
 } else {
