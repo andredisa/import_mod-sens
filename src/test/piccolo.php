@@ -182,7 +182,6 @@ if (
             $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
             $rowIndex++;
         }
-
         return $rowIndex;
     }
 
