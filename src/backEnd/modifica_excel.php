@@ -151,9 +151,9 @@ if (
                     ->setCellValue('G' . $rowIndex, 'Data Visita 2')
                     ->setCellValue('H' . $rowIndex, 'Esito')
                     ->setCellValue('I' . $rowIndex, 'Tecnico');
-                    
-                    $sheet->getStyle('D' . $rowIndex)->applyFromArray($smallFontStyle);
-                    $sheet->getStyle('G' . $rowIndex)->applyFromArray($smallFontStyle);
+
+                $sheet->getStyle('D' . $rowIndex)->applyFromArray($smallFontStyle);
+                $sheet->getStyle('G' . $rowIndex)->applyFromArray($smallFontStyle);
 
                 // Applica i bordi spessi all'intestazione dopo la firma
                 $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
