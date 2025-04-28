@@ -41,41 +41,53 @@ h2 {
 
 /* MENU 1 - colore azzurrino chiaro */
 .tab-button.menu1 {
-    background-color: #e2f1ff;  /* sempre azzurrino */
+    background-color: #e2f1ff;
+    /* sempre azzurrino */
     color: #007bff;
 }
 
 /* MENU 2 - colore blu chiaro */
 .tab-button.menu2 {
-    background-color: #d9e6ff;  /* sempre blu chiaro */
+    background-color: #d9e6ff;
+    /* sempre blu chiaro */
     color: #003eaa;
 }
 
 /* MENU 1 - attivo */
 .tab-button.active.menu1 {
-    background-color: #cbe7ff;  /* azzurrino più marcato */
+    background-color: #cbe7ff;
+    /* azzurrino più marcato */
     color: #007bff;
-    border-bottom: 3px solid #007bff;  /* Linea evidenziante più corta */
-    width: 50%; /* Imposta una larghezza per la linea più corta */
-    margin: 0 auto; /* Centra il bottone */
+    border-bottom: 3px solid #007bff;
+    /* Linea evidenziante più corta */
+    width: 50%;
+    /* Imposta una larghezza per la linea più corta */
+    margin: 0 auto;
+    /* Centra il bottone */
 }
 
 /* MENU 2 - attivo */
 .tab-button.active.menu2 {
-    background-color: #bcd4f9;  /* blu più marcato */
+    background-color: #bcd4f9;
+    /* blu più marcato */
     color: #003eaa;
-    border-bottom: 3px solid #003eaa;  /* Linea evidenziante più corta */
-    width: 50%; /* Imposta una larghezza per la linea più corta */
-    margin: 0 auto; /* Centra il bottone */
+    border-bottom: 3px solid #003eaa;
+    /* Linea evidenziante più corta */
+    width: 50%;
+    /* Imposta una larghezza per la linea più corta */
+    margin: 0 auto;
+    /* Centra il bottone */
 }
 
 /* CARD CHE CAMBIA COLORE CON IL FORM */
 .container.menu1-active {
-    background-color: #cbe7ff; /* azzurro */
+    background-color: #cbe7ff;
+    /* azzurro */
 }
 
 .container.menu2-active {
-    background-color: #bcd4f9; /* blu tenue */
+    background-color: #bcd4f9;
+    /* blu tenue */
 }
 
 /* === FORM === */
@@ -90,7 +102,7 @@ h2 {
 }
 
 /* ANIMAZIONE FORM */
-.tab-content > form {
+.tab-content>form {
     animation: slideIn 0.2s ease;
 }
 
@@ -99,6 +111,7 @@ h2 {
         opacity: 0;
         transform: translateX(100px);
     }
+
     to {
         opacity: 1;
         transform: translateX(0);
