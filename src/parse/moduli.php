@@ -44,11 +44,10 @@ function parseModules($csvFile)
     }
 
     ksort($rows); // Ordina in base alla chiave
-
     $modules = [];
     foreach ($rows as $row) {
         $modules[$row['id']] = $row['descrizione'];
     }
-
+    
     return $modules;
 }
