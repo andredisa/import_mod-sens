@@ -22,8 +22,7 @@
             <form action="backEnd/modifica_excel.php" method="POST" enctype="multipart/form-data" id="form1">
                 <div class="mb-3">
                     <label for="fileExcel" class="form-label">Scegli il file Excel da aggiornare:</label>
-                    <input type="file" class="form-control" id="fileExcel" name="fileExcel" accept=".xlsx,.xls"
-                        required>
+                    <input type="file" class="form-control" id="fileExcel" name="fileExcel" accept=".xlsx,.xls" required>
                 </div>
                 <div class="mb-3">
                     <label for="sensoriFile" class="form-label">Carica il file dei sensori CSV o TXT:</label>
@@ -51,14 +50,12 @@
             <button type="submit" class="btn btn-warning">Carica e Modifica</button>
         </form>
     </template>
-
     <script>
         const menu1 = document.getElementById("menu1");
         const menu2 = document.getElementById("menu2");
         const tabContent = document.getElementById("tabContent");
         const form1Template = document.getElementById("form1Template");
         const form2Template = document.getElementById("form2Template");
-
         const container = document.querySelector(".container");
 
         menu1.addEventListener("click", () => {
