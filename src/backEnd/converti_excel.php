@@ -208,7 +208,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
                 $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
                 $rowIndex++;
             }
-
             return $rowIndex;
         }
 
