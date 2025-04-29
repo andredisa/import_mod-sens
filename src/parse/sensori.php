@@ -45,11 +45,11 @@ function parseSensors($csvFile)
 
     // Ordina per chiave numerica (linea*10000 + sensore*10)
     ksort($rows);
-
     // Rimuovi il flag interno e restituisci array [id => descrizione]
     $sensors = [];
     foreach ($rows as $row) {
         $sensors[$row['id']] = $row['descrizione'];
     }
+    
     return $sensors;
 }
