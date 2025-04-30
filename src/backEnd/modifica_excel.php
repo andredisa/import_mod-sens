@@ -211,13 +211,11 @@ if (
                         <i class='bi bi-download'></i> Scaricare il file modificato
                     </a></p>
                 </div>
-                
             </div>
             <!-- Bootstrap JS and Popper.js -->
             <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
             <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
         </body>
-
         </html>
     ";
 } else {
