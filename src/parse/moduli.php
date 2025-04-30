@@ -15,20 +15,20 @@ function parseModules($csvFile)
 
             // Gestione moduli decimali (es. 1.1, 2.3)
             $moduloStr = str_pad(floor($moduloRaw), 2, "0", STR_PAD_LEFT);
-            $modulo = (float)$moduloRaw;
+            $modulo = (float) $moduloRaw;
             $moduloId = strpos($moduloRaw, '.') !== false ? "{$moduloStr}." . explode('.', $moduloRaw)[1] : $moduloStr;
 
             $id = "L" . $linea . "M" . $moduloId;
 
             // Chiave di ordinamento precisa, considera i decimali
-            $key = (int)$linea * 10000 + (float)($modulo * 10); // Moltiplico per 10 per gestire max .9
+            $key = (int) $linea * 10000 + (float) ($modulo * 10); // Moltiplico per 10 per gestire max .9
 
             if (isset($rows[$key])) {
                 if ($typeId !== 'NONE') {
                     $rows[$key] = [
                         'id' => $id,
                         'descrizione' => cleanString($descrizioneRaw),
-                        'preferibile' => true 
+                        'preferibile' => true
                     ];
                 }
             } else {
@@ -48,6 +48,6 @@ function parseModules($csvFile)
     foreach ($rows as $row) {
         $modules[$row['id']] = $row['descrizione'];
     }
-    
+
     return $modules;
 }
