@@ -141,7 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
                     $sheet->setCellValue('A' . $rowIndex, $entry['id']);
                     $sheet->setCellValue('B' . $rowIndex, $entry['description']);
 
-
                     // Applica i bordi sottili a tutta la riga da A a I
                     $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThin);
                     $rowIndex++;
