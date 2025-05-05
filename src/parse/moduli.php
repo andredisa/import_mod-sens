@@ -1,5 +1,6 @@
 <?php
 require_once '../gestione/funzioni.php';
+
 function parseModules($csvFile)
 {
     $rows = [];
@@ -50,4 +51,5 @@ function parseModules($csvFile)
     }
 
     return $modules;
+    
 }
