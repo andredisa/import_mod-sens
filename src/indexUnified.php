@@ -54,49 +54,78 @@
         </form>
     </template>
     <script>
-        const menu1 = document.getElementById("menu1");
-        const menu2 = document.getElementById("menu2");
-        const tabContent = document.getElementById("tabContent");
-        const form1Template = document.getElementById("form1Template");
-        const form2Template = document.getElementById("form2Template");
-        const container = document.querySelector(".container");
+    const menu1 = document.getElementById("menu1");
+    const menu2 = document.getElementById("menu2");
+    const tabContent = document.getElementById("tabContent");
+    const form2Template = document.getElementById("form2Template");
+    const container = document.querySelector(".container");
 
-        menu1.addEventListener("click", () => {
-            setActiveTab(menu1, "menu1", "menu2");
-            tabContent.innerHTML = `
-                <form action="backEnd/modifica_excel.php" method="POST" enctype="multipart/form-data" id="form1">
-                    <div class="mb-3">
-                        <label for="fileExcel" class="form-label">Excel:</label>
-                        <input type="file" class="form-control" id="fileExcel" name="fileExcel" accept=".xlsx,.xls" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="sensoriFile" class="form-label">Carica il file dei sensori CSV o TXT:</label>
-                        <input type="file" class="form-control" id="sensoriFile" name="sensoriFile" accept=".csv,.txt" required>
-                    </div>
-                    <div class="mb-3">
-                        <label for="moduliFile" class="form-label">Carica il file dei moduli CSV o TXT:</label>
-                        <input type="file" class="form-control" id="moduliFile" name="moduliFile" accept=".csv,.txt" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Carica e Modifica</button>
-                </form>
-            `;
+    function setActiveTab(activeEl, activeClass, inactiveClass) {
+        [menu1, menu2].forEach(tab => {
+            tab.classList.remove("active", "menu1", "menu2");
         });
 
-        menu2.addEventListener("click", () => {
-            setActiveTab(menu2, "menu2", "menu1");
-            const clone = form2Template.content.cloneNode(true);
+        activeEl.classList.add("active", activeClass);
+
+        container.classList.remove(`${inactiveClass}-active`);
+        container.classList.add(`${activeClass}-active`);
+    }
+
+    function switchTabContent(newContentHTMLOrNode) {
+        // Applica effetto fade-out all'elemento attuale
+        tabContent.classList.add("fade-out");
+
+        // Dopo l'animazione di uscita, sostituisci il contenuto
+        setTimeout(() => {
+            tabContent.classList.remove("fade-out");
             tabContent.innerHTML = "";
-            tabContent.appendChild(clone);
-        });
 
-        function setActiveTab(activeElement, activeClass, inactiveClass) {
-            menu1.classList.remove("active", inactiveClass);
-            menu2.classList.remove("active", inactiveClass);
-            activeElement.classList.add("active", activeClass);
-            container.classList.remove(`${inactiveClass}-active`);
-            container.classList.add(`${activeClass}-active`);
-        }
-    </script>
+            if (typeof newContentHTMLOrNode === "string") {
+                tabContent.innerHTML = newContentHTMLOrNode;
+            } else {
+                tabContent.appendChild(newContentHTMLOrNode);
+            }
+
+            tabContent.classList.add("fade-in");
+
+            // Rimuove la classe dopo l'animazione per consentire future animazioni
+            setTimeout(() => {
+                tabContent.classList.remove("fade-in");
+            }, 300);
+        }, 250); // stesso valore della durata CSS
+    }
+
+    menu1.addEventListener("click", () => {
+        setActiveTab(menu1, "menu1", "menu2");
+
+        const form1HTML = `
+            <form action="backEnd/modifica_excel.php" method="POST" enctype="multipart/form-data" id="form1">
+                <div class="mb-3">
+                    <label for="fileExcel" class="form-label">Excel:</label>
+                    <input type="file" class="form-control" id="fileExcel" name="fileExcel" accept=".xlsx,.xls" required>
+                </div>
+                <div class="mb-3">
+                    <label for="sensoriFile" class="form-label">File sensori CSV/TXT:</label>
+                    <input type="file" class="form-control" id="sensoriFile" name="sensoriFile" accept=".csv,.txt" required>
+                </div>
+                <div class="mb-3">
+                    <label for="moduliFile" class="form-label">File moduli CSV/TXT:</label>
+                    <input type="file" class="form-control" id="moduliFile" name="moduliFile" accept=".csv,.txt" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Carica e Modifica</button>
+            </form>
+        `;
+
+        switchTabContent(form1HTML);
+    });
+
+    menu2.addEventListener("click", () => {
+        setActiveTab(menu2, "menu2", "menu1");
+        const clone = form2Template.content.cloneNode(true);
+        switchTabContent(clone);
+    });
+</script>
+
 </body>
 
 </html>
