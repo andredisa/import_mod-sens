@@ -79,7 +79,7 @@ if (
     function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle)
     {
         $rowIndex = $startRow;
-        $righePerBlocco = 51;  // Righe per blocco (56 totali - 1 riga per firma)
+        $righePerBlocco = 51;  // Righe per blocco (52 totali - 1 riga per firma)
         $total = count($data);
         $i = 0;
         $signaturePrinted = false;  // Flag per gestire la stampa della firma una sola volta
