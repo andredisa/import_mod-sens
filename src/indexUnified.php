@@ -22,18 +22,15 @@
             <form action="backEnd/modifica_excel.php" method="POST" enctype="multipart/form-data" id="form1">
                 <div class="mb-3">
                     <label for="fileExcel" class="form-label">Scegli il file Excel da aggiornare:</label>
-                    <input type="file" class="form-control" id="fileExcel" name="fileExcel" accept=".xlsx,.xls"
-                        required>
+                    <input type="file" class="form-control" id="fileExcel" name="fileExcel" accept=".xlsx,.xls" required>
                 </div>
                 <div class="mb-3">
                     <label for="sensoriFile" class="form-label">Carica il file dei sensori CSV o TXT:</label>
-                    <input type="file" class="form-control" id="sensoriFile" name="sensoriFile" accept=".csv,.txt"
-                        required>
+                    <input type="file" class="form-control" id="sensoriFile" name="sensoriFile" accept=".csv,.txt" required>
                 </div>
                 <div class="mb-3">
                     <label for="moduliFile" class="form-label">Carica il file dei moduli CSV o TXT:</label>
-                    <input type="file" class="form-control" id="moduliFile" name="moduliFile" accept=".csv,.txt"
-                        required>
+                    <input type="file" class="form-control" id="moduliFile" name="moduliFile" accept=".csv,.txt" required>
                 </div>
                 <button type="submit" class="btn btn-primary">Carica e Modifica</button>
             </form>
