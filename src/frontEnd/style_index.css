@@ -66,6 +66,17 @@ h2 {
     /* Centra il bottone */
 }
 
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+}
+
+.fade-in {
+    opacity: 1;
+    transition: opacity 0.25s ease-in;
+}
+
+
 /* MENU 2 - attivo */
 .tab-button.active.menu2 {
     background-color: #bcd4f9;
@@ -147,3 +158,72 @@ form button.btn {
         padding: 20px;
     }
 }
+
+/* Tooltip design */
+.tooltip-container {
+    position: relative;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    background-color: black;
+    border-radius: 50%; /* Punto di domanda circolare */
+    width: 24px; /* Aumentato per rendere il cerchio più grande */
+    height: 24px; /* Stesso valore di larghezza per mantenere il cerchio perfetto */
+    text-align: center;
+    line-height: 24px; /* Centra il punto di domanda */
+    margin-left: 15px; /* Maggiore distanza dal testo */
+    vertical-align: middle;
+    padding-bottom: 3px; /* Leggero padding per il punto di domanda */
+    padding-top: 3px;
+    padding-left: 8px;
+    padding-right: 8px; /* Maggiore padding per il punto di domanda */
+}
+
+/* Tooltip text */
+.tooltip-text {
+    visibility: hidden;
+    width: 250px; /* Aumentato per maggior spazio di testo */
+    background: white;
+    color: #333;
+    text-align: left;
+    border-radius: 8px;
+    padding: 12px;
+    position: absolute;
+    z-index: 10;
+    bottom: 150%; /* Maggiore distanza dal punto di domanda */
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    font-size: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 1px solid #ddd;
+}
+
+/* Tooltip visibile */
+.tooltip-container:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+.tooltip-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.tooltip-separator {
+    height: 1px;
+    background-color: #ddd;
+    margin: 5px 0;
+}
+
+.tooltip-container:hover .tooltip-text,
+.tooltip-container:focus .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+
+
