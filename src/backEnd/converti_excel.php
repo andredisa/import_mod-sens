@@ -13,9 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
         die("Errore: il file da convertire deve essere un Excel (.xls, .xlsx)");
     }
 
+    $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int)$_POST['righeTotaliPagina'] : 81;
     $fileUpdatePath = $_FILES['ExcelFile']['tmp_name'];
     $fileUpdateName = $_FILES['ExcelFile']['name'];
     $fileUpdateType = pathinfo($fileUpdateName, PATHINFO_EXTENSION);
+
 
     if (!in_array($fileUpdateType, ['xls', 'xlsx'])) {
         die("Errore: il file da aggiornare deve essere un Excel (.xls, .xlsx)");
@@ -96,121 +98,71 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
         $borderThick = ['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_MEDIUM, 'color' => ['argb' => '000000']]]];
         $smallFontStyle = ['font' => ['size' => 8]];
 
-        function printData($sheet, $arrayOrdinatoFinale, $startRow, $borderThin, $borderThick)
+        function printData($sheet, $arrayOrdinatoFinale, $startRow, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina)
         {
             $rowIndex = $startRow;
-            $righePerBlocco = 81;  // Righe per blocco (56 totali - 1 riga per firma)
             $total = count($arrayOrdinatoFinale);
             $i = 0;
-            $signaturePrinted = false;  // Flag per gestire la stampa della firma una sola volta
-
-            // Stampa l'intestazione iniziale alla riga 4 (con bordi spessi)
-            $sheet->setCellValue('A' . $rowIndex, 'Id')
-                ->setCellValue('B' . $rowIndex, 'Tipo')
-                ->setCellValue('C' . $rowIndex, 'Anzianità')
-                ->setCellValue('D' . $rowIndex, 'Data Visita 1')
-                ->setCellValue('E' . $rowIndex, 'Esito')
-                ->setCellValue('F' . $rowIndex, 'Tecnico')
-                ->setCellValue('G' . $rowIndex, 'Data Visita 2')
-                ->setCellValue('H' . $rowIndex, 'Esito')
-                ->setCellValue('I' . $rowIndex, 'Tecnico');
-            // Adattare la larghezza delle colonne automaticamente
-            $sheet->getColumnDimension('A')->setAutoSize(true);
-            $sheet->getColumnDimension('B')->setAutoSize(true);
-            $sheet->getColumnDimension('C')->setAutoSize(true);
-            $sheet->getColumnDimension('D')->setAutoSize(true);
-            $sheet->getColumnDimension('E')->setAutoSize(true);
-            $sheet->getColumnDimension('F')->setAutoSize(true);
-            $sheet->getColumnDimension('G')->setAutoSize(true);
-            $sheet->getColumnDimension('H')->setAutoSize(true);
-            $sheet->getColumnDimension('I')->setAutoSize(true);
-
-            // Applica bordi spessi all'intestazione
-            $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
-            $rowIndex++;  // Vai alla riga successiva dopo l'intestazione
-
-            // Stampa i dati
+        
             while ($i < $total) {
-                // Stampa fino a 51 righe di dati
-                $righeStampate = 0;
-                while ($i < $total && $righeStampate < $righePerBlocco) {
+                // Stampa intestazione tabella
+                $sheet->setCellValue('A' . $rowIndex, 'Id')
+                    ->setCellValue('B' . $rowIndex, 'Tipo')
+                    ->setCellValue('C' . $rowIndex, 'Anzianità')
+                    ->setCellValue('D' . $rowIndex, 'Data Visita 1')
+                    ->setCellValue('E' . $rowIndex, 'Esito')
+                    ->setCellValue('F' . $rowIndex, 'Tecnico')
+                    ->setCellValue('G' . $rowIndex, 'Data Visita 2')
+                    ->setCellValue('H' . $rowIndex, 'Esito')
+                    ->setCellValue('I' . $rowIndex, 'Tecnico');
+                $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
+                $sheet->getColumnDimension('A')->setAutoSize(true);
+                $sheet->getColumnDimension('B')->setAutoSize(true);
+                $sheet->getColumnDimension('C')->setAutoSize(true);
+                $sheet->getColumnDimension('D')->setAutoSize(true);
+                $sheet->getColumnDimension('E')->setAutoSize(true);
+                $sheet->getColumnDimension('F')->setAutoSize(true);
+                $sheet->getColumnDimension('G')->setAutoSize(true);
+                $sheet->getColumnDimension('H')->setAutoSize(true);
+                $sheet->getColumnDimension('I')->setAutoSize(true);
+                $rowIndex++;
+        
+                // Calcola righe rimanenti
+                $righeRimanenti = $total - $i;
+                $righeDaStampare = min($righeTotaliPagina, $righeRimanenti);
+        
+                // Se le righe sono esattamente quante ne servono per riempire il blocco, lascia una per la firma
+                if ($righeDaStampare == $righeTotaliPagina) {
+                    $righeDaStampare--;
+                }
+        
+                // Stampa righe dati
+                for ($j = 0; $j < $righeDaStampare && $i < $total; $j++, $i++) {
                     $entry = $arrayOrdinatoFinale[$i];
-                    $id = $entry['id'];
-                    $descrizione = $entry['description'];
-
                     $sheet->setCellValue('A' . $rowIndex, $entry['id']);
                     $sheet->setCellValue('B' . $rowIndex, $entry['description']);
-
-                    // Applica i bordi sottili a tutta la riga da A a I
                     $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThin);
                     $rowIndex++;
-
-                    // Avanza al prossimo elemento nell'array
-                    $i++;
-                    $righeStampate++;
                 }
-
-                // Riga per la firma dopo ogni 51 righe stampate (bordo spesso)
-                if ($righeStampate == $righePerBlocco) {
-                    $sheet->mergeCells("A$rowIndex:C$rowIndex");
-                    $sheet->mergeCells("D$rowIndex:F$rowIndex");
-                    $sheet->mergeCells("G$rowIndex:I$rowIndex");
-
-                    $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
-                    $sheet->setCellValue("D$rowIndex", 'Visita 1');
-                    $sheet->setCellValue("G$rowIndex", 'Visita 2');
-
-                    // Applica i bordi spessi alla riga della firma
-                    $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
-                    $rowIndex++;
-
-                    $signaturePrinted = true;  // La firma è stata stampata
-                }
-                // Ristampa l'intestazione dopo ogni firma (bordo spesso)
-                if ($i < $total) {
-                    $sheet->setCellValue('A' . $rowIndex, 'Id')
-                        ->setCellValue('B' . $rowIndex, 'Tipo')
-                        ->setCellValue('C' . $rowIndex, 'Anzianità')
-                        ->setCellValue('D' . $rowIndex, 'Data Visita 1')
-                        ->setCellValue('E' . $rowIndex, 'Esito')
-                        ->setCellValue('F' . $rowIndex, 'Tecnico')
-                        ->setCellValue('G' . $rowIndex, 'Data Visita 2')
-                        ->setCellValue('H' . $rowIndex, 'Esito')
-                        ->setCellValue('I' . $rowIndex, 'Tecnico');
-                    $sheet->getColumnDimension('A')->setAutoSize(true);
-                    $sheet->getColumnDimension('B')->setAutoSize(true);
-                    $sheet->getColumnDimension('C')->setAutoSize(true);
-                    $sheet->getColumnDimension('D')->setAutoSize(true);
-                    $sheet->getColumnDimension('E')->setAutoSize(true);
-                    $sheet->getColumnDimension('F')->setAutoSize(true);
-                    $sheet->getColumnDimension('G')->setAutoSize(true);
-                    $sheet->getColumnDimension('H')->setAutoSize(true);
-                    $sheet->getColumnDimension('I')->setAutoSize(true);
-
-                    // Applica i bordi spessi all'intestazione dopo la firma
-                    $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThick);
-                    $rowIndex++;  // Vai alla riga successiva dopo l'intestazione
-                }
-            }
-
-            // Se siamo alla fine dei dati e la firma non è stata ancora stampata, aggiungila (bordo spesso)
-            if ($i >= $total && !$signaturePrinted) {
+        
+                // Stampa sempre la riga firma dopo ogni blocco (anche parziale)
                 $sheet->mergeCells("A$rowIndex:C$rowIndex");
                 $sheet->mergeCells("D$rowIndex:F$rowIndex");
                 $sheet->mergeCells("G$rowIndex:I$rowIndex");
-
+        
                 $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
                 $sheet->setCellValue("D$rowIndex", 'Visita 1');
                 $sheet->setCellValue("G$rowIndex", 'Visita 2');
-
-                // Applica i bordi spessi alla riga della firma
+        
                 $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
                 $rowIndex++;
             }
+        
             return $rowIndex;
         }
+        
 
-        printData($sheet, $arrayOrdinatoFinale, 4, $borderThin, $borderThick, $smallFontStyle);
+        printData($sheet, $arrayOrdinatoFinale, 4, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina);
 
         // ===== Salvataggio =====
         $outputFileName = 'file_modificato_' . time() . '.xlsx';
