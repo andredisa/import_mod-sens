@@ -4,6 +4,17 @@ require '../../vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Style\Border;  // <<< Import Border per usare stile
 
+// Pulisce i file modificati più vecchi di 10 minuti (600 secondi)
+$files = glob('file_modificato_*.xlsx');
+$now = time();
+
+foreach ($files as $file) {
+    if (is_file($file) && ($now - filemtime($file)) > 600) {
+        unlink($file);
+    }
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isset($_FILES['ExcelFile'])) {
     $fileTmpPath = $_FILES['fileExcel']['tmp_name'];
     $fileName = $_FILES['fileExcel']['name'];
@@ -13,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
         die("Errore: il file da convertire deve essere un Excel (.xls, .xlsx)");
     }
 
-    $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int)$_POST['righeTotaliPagina'] : 81;
+    $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int) $_POST['righeTotaliPagina'] : 81;
     $fileUpdatePath = $_FILES['ExcelFile']['tmp_name'];
     $fileUpdateName = $_FILES['ExcelFile']['name'];
     $fileUpdateType = pathinfo($fileUpdateName, PATHINFO_EXTENSION);
@@ -98,12 +109,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
         $borderThick = ['borders' => ['allBorders' => ['borderStyle' => Border::BORDER_MEDIUM, 'color' => ['argb' => '000000']]]];
         $smallFontStyle = ['font' => ['size' => 8]];
 
-        function printData($sheet, $arrayOrdinatoFinale, $startRow, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina)
+        function printData($sheet, $arrayOrdinatoFinale, $startRow, $borderThin, $borderThick, $smallFontStyle, $righeTotaliPagina)
         {
             $rowIndex = $startRow;
             $total = count($arrayOrdinatoFinale);
             $i = 0;
-        
+
             while ($i < $total) {
                 // Stampa intestazione tabella
                 $sheet->setCellValue('A' . $rowIndex, 'Id')
@@ -126,16 +137,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
                 $sheet->getColumnDimension('H')->setAutoSize(true);
                 $sheet->getColumnDimension('I')->setAutoSize(true);
                 $rowIndex++;
-        
+
                 // Calcola righe rimanenti
                 $righeRimanenti = $total - $i;
                 $righeDaStampare = min($righeTotaliPagina, $righeRimanenti);
-        
+
                 // Se le righe sono esattamente quante ne servono per riempire il blocco, lascia una per la firma
                 if ($righeDaStampare == $righeTotaliPagina) {
                     $righeDaStampare--;
                 }
-        
+
                 // Stampa righe dati
                 for ($j = 0; $j < $righeDaStampare && $i < $total; $j++, $i++) {
                     $entry = $arrayOrdinatoFinale[$i];
@@ -144,25 +155,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
                     $sheet->getStyle('A' . $rowIndex . ':I' . $rowIndex)->applyFromArray($borderThin);
                     $rowIndex++;
                 }
-        
+
                 // Stampa sempre la riga firma dopo ogni blocco (anche parziale)
                 $sheet->mergeCells("A$rowIndex:C$rowIndex");
                 $sheet->mergeCells("D$rowIndex:F$rowIndex");
                 $sheet->mergeCells("G$rowIndex:I$rowIndex");
-        
+
                 $sheet->setCellValue("A$rowIndex", 'FIRMA  RESP. CLIENTE');
                 $sheet->setCellValue("D$rowIndex", 'Visita 1');
                 $sheet->setCellValue("G$rowIndex", 'Visita 2');
-        
+
                 $sheet->getStyle("A$rowIndex:I$rowIndex")->applyFromArray($borderThick);
                 $rowIndex++;
             }
-        
+
             return $rowIndex;
         }
-        
 
-        printData($sheet, $arrayOrdinatoFinale, 4, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina);
+
+        printData($sheet, $arrayOrdinatoFinale, 4, $borderThin, $borderThick, $smallFontStyle, $righeTotaliPagina);
 
         // ===== Salvataggio =====
         $outputFileName = 'file_modificato_' . time() . '.xlsx';
@@ -176,17 +187,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
         <head>
             <meta charset='UTF-8'>
             <title>File Caricato e Modificato</title>
+            <link href='../frontEnd/modifica_excel_style.css' rel='stylesheet'>
             <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
             <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
         </head>
         <body>
+        <div class='back'>
+            <input type='button' class='btn btn-primary' value='Torna Indietro' onclick='history.back()'>
+        </div>
         <div class='container mt-5'>
             <div class='alert alert-success'>
                 <strong>Successo!</strong> Il file è stato modificato correttamente.
             </div>
             <div class='text-center'>
-                <a href='$outputFileName' download class='btn btn-success'>
-                    <i class='bi bi-download'></i> Scarica il file modificato
+                <a href='download.php?file=$outputFileName' class='btn btn-download'>
+                    <i class='bi bi-download'></i> Scaricare il file modificato
                 </a>
             </div>
         </div>
