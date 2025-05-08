@@ -18,6 +18,8 @@ if (
     $sensoriFile = $_FILES['sensoriFile']['tmp_name'];
     $moduliFile = $_FILES['moduliFile']['tmp_name'];
     $excelFile = $_FILES['fileExcel']['tmp_name'];
+    $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int)$_POST['righeTotaliPagina'] : 81;
+
 
     $sensori = parseSensors($sensoriFile);
     $moduli = parseModules($moduliFile);
@@ -77,10 +79,10 @@ if (
     ];
 
     // Funzione per stampare i dati con bordi
-    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle)
+    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina)
     {
         $rowIndex = $startRow;
-        $righePerBlocco = 53;  // Righe per blocco (56 totali - 1 riga per firma)
+        $righeTotaliPagina = 53;  // Righe per blocco (56 totali - 1 riga per firma)
         $total = count($data);
         $i = 0;
         $signaturePrinted = false;  // Flag per gestire la stampa della firma una sola volta
@@ -108,7 +110,7 @@ if (
         while ($i < $total) {
             // Stampa fino a 51 righe di dati
             $righeStampate = 0;
-            while ($i < $total && $righeStampate < $righePerBlocco) {
+            while ($i < $total && $righeStampate < $righeTotaliPagina) {
                 $id = key($data);  // Ottieni la chiave (id) dell'array
                 $descrizione = current($data);  // Ottieni il valore della descrizione
 
@@ -127,7 +129,7 @@ if (
             }
 
             // Riga per la firma dopo ogni 51 righe stampate (bordo spesso)
-            if ($righeStampate == $righePerBlocco) {
+            if ($righeStampate == $righeTotaliPagina) {
                 $sheet->mergeCells("A$rowIndex:C$rowIndex");
                 $sheet->mergeCells("D$rowIndex:F$rowIndex");
                 $sheet->mergeCells("G$rowIndex:I$rowIndex");
@@ -177,7 +179,7 @@ if (
     }
 
     // Chiama la funzione passando i dati uniti
-    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick, $smallFontStyle);  // 4 è la riga iniziale (intestazione)
+    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina);  // 4 è la riga iniziale (intestazione)
 
     // Salvataggio del file modificato
     $outputFileName = 'file_modificato_' . time() . '.xlsx';
