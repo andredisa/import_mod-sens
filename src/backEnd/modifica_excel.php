@@ -9,6 +9,16 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Font;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
+// Pulisce i file modificati più vecchi di 10 minuti (600 secondi)
+$files = glob('file_modificato_*.xlsx');
+$now = time();
+
+foreach ($files as $file) {
+    if (is_file($file) && ($now - filemtime($file)) > 600) {
+        unlink($file);
+    }
+}
+
 if (
     isset($_FILES['sensoriFile']) && $_FILES['sensoriFile']['error'] == 0 &&
     isset($_FILES['moduliFile']) && $_FILES['moduliFile']['error'] == 0 &&
@@ -18,7 +28,7 @@ if (
     $sensoriFile = $_FILES['sensoriFile']['tmp_name'];
     $moduliFile = $_FILES['moduliFile']['tmp_name'];
     $excelFile = $_FILES['fileExcel']['tmp_name'];
-    $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int)$_POST['righeTotaliPagina'] : 81;
+    $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int) $_POST['righeTotaliPagina'] : 81;
 
 
     $sensori = parseSensors($sensoriFile);
@@ -79,7 +89,7 @@ if (
     ];
 
     // Funzione per stampare i dati con bordi
-    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina)
+    function printData($sheet, $data, $startRow, $borderThin, $borderThick, $smallFontStyle, $righeTotaliPagina)
     {
         $rowIndex = $startRow;
         $righeTotaliPagina = 53;  // Righe per blocco (56 totali - 1 riga per firma)
@@ -179,7 +189,7 @@ if (
     }
 
     // Chiama la funzione passando i dati uniti
-    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick, $smallFontStyle,$righeTotaliPagina);  // 4 è la riga iniziale (intestazione)
+    $nextRow = printData($sheet, $data, 4, $borderThin, $borderThick, $smallFontStyle, $righeTotaliPagina);  // 4 è la riga iniziale (intestazione)
 
     // Salvataggio del file modificato
     $outputFileName = 'file_modificato_' . time() . '.xlsx';
@@ -201,6 +211,9 @@ if (
         <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
     </head>
     <body>
+            <div class='back'>
+                <input type='button' class='btn btn-primary' value='Torna Indietro' onclick='history.back()'>
+            </div>
             <div class='container'>
                 <h1>Operazione Completata</h1>
                 <div class='alert alert-success alert-dismissible fade show' role='alert'>
@@ -209,9 +222,9 @@ if (
                 </div>
 
                 <div class='text-center'>
-                    <a href='$outputFileName' download class='btn btn-download'>
-                        <i class='bi bi-download'></i> Scaricare il file modificato
-                    </a></p>
+                    <a href='download.php?file=$outputFileName' class='btn btn-download'>
+                    <i class='bi bi-download'></i> Scaricare il file modificato
+                </a>
                 </div>
             </div>
             <!-- Bootstrap JS and Popper.js -->
