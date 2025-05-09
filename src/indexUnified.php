@@ -37,15 +37,18 @@
                 <input type="file" class="form-control" id="moduliFile" name="moduliFile" accept=".csv,.txt" required>
             </div>
             <div class="mb-3">
-                <label for="righeTotaliPagina1" class="form-label">Imposta la posizione della riga per la firma (default 53):</label>
+                <label for="righeTotaliPagina1" class="form-label">Imposta la posizione della riga per la firma (default
+                    53):</label>
                 <span class="tooltip-container" onclick="event.stopPropagation()">?
                     <span class="tooltip-text">
                         <div class="tooltip-title">Info</div>
                         <div class="tooltip-separator"></div>
-                        <div>Quando inserisci la posizione, la firma verrà posizionata al numero indicato + 1 (esempio: 53 + 1, quindi la riga sarà alla posizione 54).</div>
+                        <div>Quando inserisci la posizione, la firma verrà posizionata al numero indicato + 1 (esempio:
+                            53 + 1, quindi la riga sarà alla posizione 54).</div>
                     </span>
                 </span>
-                <input type="number" class="form-control" name="righeTotaliPagina" id="righeTotaliPagina1" value="53" min="1" required>
+                <input type="number" class="form-control" name="righeTotaliPagina" id="righeTotaliPagina1" value="53"
+                    min="1" required>
             </div>
             <button type="submit" class="btn btn-primary">Carica e Modifica</button>
         </form>
@@ -62,15 +65,18 @@
                 <input type="file" class="form-control" name="ExcelFile" id="Excel" accept=".xls,.xlsx" required>
             </div>
             <div class="mb-3">
-                <label for="righeTotaliPagina2" class="form-label">Imposta la posizione della riga per la firma (default 81):</label>
+                <label for="righeTotaliPagina2" class="form-label">Imposta la posizione della riga per la firma (default
+                    81):</label>
                 <span class="tooltip-container" onclick="event.stopPropagation()">?
                     <span class="tooltip-text">
                         <div class="tooltip-title">Info</div>
                         <div class="tooltip-separator"></div>
-                        <div>Quando inserisci la posizione, la firma verrà posizionata al numero indicato + 1 (esempio: 81 + 1, quindi la riga sarà alla posizione 82).</div>
+                        <div>Quando inserisci la posizione, la firma verrà posizionata al numero indicato + 1 (esempio:
+                            81 + 1, quindi la riga sarà alla posizione 82).</div>
                     </span>
                 </span>
-                <input type="number" class="form-control" name="righeTotaliPagina" id="righeTotaliPagina2" value="81" min="1" required>
+                <input type="number" class="form-control" name="righeTotaliPagina" id="righeTotaliPagina2" value="81"
+                    min="1" required>
             </div>
             <button type="submit" class="btn btn-warning">Carica e Modifica</button>
         </form>
