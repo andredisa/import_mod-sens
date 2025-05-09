@@ -52,5 +52,5 @@ function parseSensors($csvFile)
     }
 
     return $sensors;
-    
+
 }
