@@ -200,6 +200,7 @@ if (
     <!DOCTYPE html>
     <html lang='it'>
     <head>
+
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>File Caricato e Modificato</title>
@@ -209,6 +210,7 @@ if (
         <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
         <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
     </head>
+    
     <body>
             <div class='back'>
                 <input type='button' class='btn btn-primary' value='Torna Indietro' onclick='history.back()'>
