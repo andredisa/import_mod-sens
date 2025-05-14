@@ -51,5 +51,4 @@ function parseModules($csvFile)
     }
 
     return $modules;
-
 }
