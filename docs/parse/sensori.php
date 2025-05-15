@@ -39,7 +39,6 @@ function parseSensors($csvFile)
                 ];
             }
         }
-
         fclose($handle);
     }
 
@@ -50,7 +49,5 @@ function parseSensors($csvFile)
     foreach ($rows as $row) {
         $sensors[$row['id']] = $row['descrizione'];
     }
-
     return $sensors;
-    
 }
