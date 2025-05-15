@@ -6,4 +6,5 @@ function cleanString($string)
     $string = preg_replace('/\s+/', ' ', $string); // normalizza spazi
     return trim($string);
 }
+
 ?>
