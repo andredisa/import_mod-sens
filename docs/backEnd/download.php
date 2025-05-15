@@ -1,4 +1,5 @@
 <?php
+
 if (isset($_GET['file'])) {
     $file = basename($_GET['file']); // Sicurezza: rimuove path esterni
     $filePath = __DIR__ . '/' . $file;
