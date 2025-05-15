@@ -3,13 +3,11 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 40px 0;
 }
-
 h2 {
     text-align: center;
     margin-bottom: 25px;
     color: #333;
 }
-
 /* === CARD CONTAINER === */
 .container {
     max-width: 750px;
@@ -20,13 +18,11 @@ h2 {
     transition: background-color 0.5s ease;
     padding: 20px;
 }
-
 /* === TABS IN ALTO === */
 .navbar-tabs {
     display: flex;
     width: 100%;
 }
-
 /* Base comune */
 .tab-button {
     flex: 1;
@@ -38,21 +34,18 @@ h2 {
     border-bottom: 3px solid transparent;
     transition: background-color 0.3s ease-in-out, color 0.3s, border-bottom 0.3s;
 }
-
 /* MENU 1 - colore azzurrino chiaro */
 .tab-button.menu1 {
     background-color: #e2f1ff;
     /* sempre azzurrino */
     color: #007bff;
 }
-
 /* MENU 2 - colore blu chiaro */
 .tab-button.menu2 {
     background-color: #d9e6ff;
     /* sempre blu chiaro */
     color: #003eaa;
 }
-
 /* MENU 1 - attivo */
 .tab-button.active.menu1 {
     background-color: #cbe7ff;
@@ -65,18 +58,14 @@ h2 {
     margin: 0 auto;
     /* Centra il bottone */
 }
-
 .fade-out {
     opacity: 0;
     transition: opacity 0.25s ease-out;
 }
-
 .fade-in {
     opacity: 1;
     transition: opacity 0.25s ease-in;
 }
-
-
 /* MENU 2 - attivo */
 .tab-button.active.menu2 {
     background-color: #bcd4f9;
@@ -89,18 +78,15 @@ h2 {
     margin: 0 auto;
     /* Centra il bottone */
 }
-
 /* CARD CHE CAMBIA COLORE CON IL FORM */
 .container.menu1-active {
     background-color: #cbe7ff;
     /* azzurro */
 }
-
 .container.menu2-active {
     background-color: #bcd4f9;
     /* blu tenue */
 }
-
 /* === FORM === */
 .tab-content {
     position: relative;
@@ -111,34 +97,28 @@ h2 {
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
 }
-
 /* ANIMAZIONE FORM */
 .tab-content>form {
     animation: slideIn 0.2s ease;
 }
-
 @keyframes slideIn {
     from {
         opacity: 0;
         transform: translateX(100px);
     }
-
     to {
         opacity: 1;
         transform: translateX(0);
     }
 }
-
 /* FORM ELEMENTI */
 form .form-label {
     font-weight: 500;
     margin-top: 10px;
 }
-
 form .form-control {
     border-radius: 6px;
 }
-
 form button.btn {
     width: 100%;
     margin-top: 20px;
@@ -146,19 +126,16 @@ form button.btn {
     font-weight: bold;
     border-radius: 8px;
 }
-
 /* RESPONSIVE */
 @media (max-width: 768px) {
     .tab-button {
         padding: 12px;
         font-size: 14px;
     }
-
     .tab-content {
         padding: 20px;
     }
 }
-
 /* Tooltip design */
 .tooltip-container {
     position: relative;
@@ -179,7 +156,6 @@ form button.btn {
     padding-left: 8px;
     padding-right: 8px; /* Maggiore padding per il punto di domanda */
 }
-
 /* Tooltip text */
 .tooltip-text {
     visibility: hidden;
@@ -200,30 +176,24 @@ form button.btn {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border: 1px solid #ddd;
 }
-
 /* Tooltip visibile */
 .tooltip-container:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
-
 .tooltip-title {
     text-align: center;
     font-size: 14px;
     font-weight: bold;
     margin-bottom: 5px;
 }
-
 .tooltip-separator {
     height: 1px;
     background-color: #ddd;
     margin: 5px 0;
 }
-
 .tooltip-container:hover .tooltip-text,
 .tooltip-container:focus .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
-
-
