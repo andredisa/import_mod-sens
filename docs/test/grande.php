@@ -205,23 +205,23 @@ if (
         <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
     </head>
     <body>
-            <div class='container'>
-                <h1>Operazione Completata</h1>
-                <div class='alert alert-success alert-dismissible fade show' role='alert'>
-                    <strong>Successo!</strong> Il file è stato caricato e modificato correttamente.
-                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                </div>
-                <div class='text-center'>
-                    <a href='$outputFileName' download class='btn btn-download'>
-                        <i class='bi bi-download'></i> Scaricare il file modificato
-                    </a></p>
-                </div>
+        <div class='container'>
+            <h1>Operazione Completata</h1>
+            <div class='alert alert-success alert-dismissible fade show' role='alert'>
+                <strong>Successo!</strong> Il file è stato caricato e modificato correttamente.
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
             </div>
-            <!-- Bootstrap JS and Popper.js -->
-            <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
-            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
-        </body>
-        </html>
+            <div class='text-center'>
+                <a href='$outputFileName' download class='btn btn-download'>
+                    <i class='bi bi-download'></i> Scaricare il file modificato
+                </a></p>
+            </div>
+        </div>
+        <!-- Bootstrap JS and Popper.js -->
+        <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
+    </body>
+    </html>
     ";
 } else {
     echo "<p class='alert alert-danger'>Errore nel caricamento dei file!</p>";
