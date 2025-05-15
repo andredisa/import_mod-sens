@@ -30,7 +30,6 @@ if (
     $excelFile = $_FILES['fileExcel']['tmp_name'];
     $righeTotaliPagina = isset($_POST['righeTotaliPagina']) && is_numeric($_POST['righeTotaliPagina']) ? (int) $_POST['righeTotaliPagina'] : 81;
 
-
     $sensori = parseSensors($sensoriFile);
     $moduli = parseModules($moduliFile);
 
@@ -200,39 +199,36 @@ if (
     <!DOCTYPE html>
     <html lang='it'>
     <head>
-
         <meta charset='UTF-8'>
         <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>File Caricato e Modificato</title>
-
         <!-- Bootstrap CSS -->
         <link href='../frontEnd/modifica_excel_style.css' rel='stylesheet'>
         <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
         <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
     </head>
-    
     <body>
-            <div class='back'>
-                <input type='button' class='btn btn-primary' value='Torna Indietro' onclick='history.back()'>
+        <div class='back'>
+            <input type='button' class='btn btn-primary' value='Torna Indietro' onclick='history.back()'>
+        </div>
+        <div class='container'>
+            <h1>Operazione Completata</h1>
+            <div class='alert alert-success alert-dismissible fade show' role='alert'>
+                <strong>Successo!</strong> Il file è stato caricato e modificato correttamente.
+                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
             </div>
-            <div class='container'>
-                <h1>Operazione Completata</h1>
-                <div class='alert alert-success alert-dismissible fade show' role='alert'>
-                    <strong>Successo!</strong> Il file è stato caricato e modificato correttamente.
-                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
-                </div>
 
-                <div class='text-center'>
-                    <a href='download.php?file=$outputFileName' class='btn btn-download'>
-                    <i class='bi bi-download'></i> Scaricare il file modificato
-                </a>
-                </div>
+            <div class='text-center'>
+                <a href='download.php?file=$outputFileName' class='btn btn-download'>
+                <i class='bi bi-download'></i> Scaricare il file modificato
+            </a>
             </div>
-            <!-- Bootstrap JS and Popper.js -->
-            <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
-            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
-        </body>
-        </html>
+        </div>
+        <!-- Bootstrap JS and Popper.js -->
+        <script src='https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js'></script>
+        <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js'></script>
+    </body>
+    </html>
     ";
 } else {
     echo "<p class='alert alert-danger'>Errore nel caricamento dei file!</p>";
