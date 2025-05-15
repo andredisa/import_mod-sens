@@ -14,7 +14,6 @@ foreach ($files as $file) {
     }
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isset($_FILES['ExcelFile'])) {
     $fileTmpPath = $_FILES['fileExcel']['tmp_name'];
     $fileName = $_FILES['fileExcel']['name'];
@@ -172,7 +171,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
             return $rowIndex;
         }
 
-
         printData($sheet, $arrayOrdinatoFinale, 4, $borderThin, $borderThick, $smallFontStyle, $righeTotaliPagina);
 
         // ===== Salvataggio =====
@@ -185,17 +183,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
         <!DOCTYPE html>
         <html lang='it'>
         <head>
-
             <meta charset='UTF-8'>
             <title>File Caricato e Modificato</title>
             <link href='../frontEnd/modifica_excel_style.css' rel='stylesheet'>
             <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css' rel='stylesheet'>
             <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css' rel='stylesheet'>
-        
         </head>
-
         <body>
-
             <div class='back'>
                 <input type='button' class='btn btn-primary' value='Torna Indietro' onclick='history.back()'>
             </div>
@@ -209,7 +203,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
                     </a>
                 </div>
             </div>
-
         </body>
         </html>
         ";
