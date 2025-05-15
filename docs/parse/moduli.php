@@ -40,7 +40,6 @@ function parseModules($csvFile)
                 ];
             }
         }
-
         fclose($handle);
     }
 
@@ -49,6 +48,5 @@ function parseModules($csvFile)
     foreach ($rows as $row) {
         $modules[$row['id']] = $row['descrizione'];
     }
-
     return $modules;
 }
