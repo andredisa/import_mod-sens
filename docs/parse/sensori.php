@@ -1,4 +1,5 @@
 <?php
+
 require_once '../gestione/funzioni.php';
 function parseSensors($csvFile)
 {
