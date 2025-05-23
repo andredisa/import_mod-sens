@@ -60,6 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['fileExcel']) && isse
             }
         }
 
+        
         // ===== 2. Ordina i dati =====
         function estraiChiaviOrdine($description)
         {
