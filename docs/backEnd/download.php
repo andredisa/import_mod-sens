@@ -21,4 +21,5 @@ if (isset($_GET['file'])) {
 } else {
     echo "Parametro file mancante.";
 }
+
 ?>
