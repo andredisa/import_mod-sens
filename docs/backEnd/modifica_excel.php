@@ -79,6 +79,7 @@ if (
             ],
         ],
     ];
+    
 
     // Stile del font per Data Visita 1 e Data Visita 2 (testo più piccolo)
     $smallFontStyle = [
